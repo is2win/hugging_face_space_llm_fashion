@@ -9,9 +9,12 @@ import os
 from huggingface_hub import hf_hub_download
 
 # Указываю имя репозитория и название скачиваемой модели
-# model_name = "second-state/Mistral-Nemo-Instruct-2407-GGUF"
-model_name = "lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF"
-model_file = "Meta-Llama-3.1-8B-Instruct-Q8_0.gguf"
+
+# model_name = "lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF"
+# model_file = "Meta-Llama-3.1-8B-Instruct-Q8_0.gguf"
+
+model_name = "lmstudio-community/Mistral-Nemo-Instruct-2407-GGUF"
+model_file = "Mistral-Nemo-Instruct-2407-Q4_K_M.gguf"
 
 
 # Загрузка с Hugging Face Hub
