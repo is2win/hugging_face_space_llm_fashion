@@ -35,33 +35,18 @@ llm = LlamaCpp(
     n_gpu_layers=-1,
 )
 
-def predict(input, history=[]):
+def predict(user_input):
     prompt_template = """
-    <|start_header_id|>system<|end_header_id|>
-    Вы личный ассистент по моде.
-    ЗАПРЕЩАЮ ВЫДУМЫВАТЬ и вредить людям
-    <|eot_id|>
-    <|start_header_id|>user<|end_header_id|>
-    Используй максимально emoji
-    Ответь на вопросы строго на основе предоставленного Контекста.
-    Если информация в контексте отсутствует, напиши сообщение "Ответа нет". 
     Вопрос: {question_info}
-    <|eom_id|>
     """
     prompt = PromptTemplate.from_template(prompt_template)
     llm_chain = prompt | llm
-    question_info= """
-    Привет    
-    """
-    output = llm_chain.invoke({'question_info':question_info})
+    output = llm_chain.invoke({'question_info': user_input})
     return output
 
-#creating a gradio interface
-
-import gradio as gr
-
+# Создание интерфейса Gradio
 demo = gr.Interface(fn=predict,
-             inputs=["text", "state"],
-             outputs=["chatbot", "state"])
+             inputs="text",
+             outputs="text")
 
 demo.launch()
