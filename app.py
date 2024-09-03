@@ -30,8 +30,8 @@ print("My model path:", model_path)
 llm = LlamaCpp(
     model_path=model_path,
     temperature=0.5,
-    max_tokens=200,
-    n_ctx=200,
+    max_tokens=500,
+    n_ctx=4000,
     n_gpu_layers=-1,
 )
 
@@ -49,4 +49,4 @@ demo = gr.Interface(fn=predict,
              inputs="text",
              outputs="text")
 
-demo.launch(share=True)
+demo.launch()
