@@ -35,42 +35,33 @@ llm = LlamaCpp(
     n_gpu_layers=-1,
 )
 
-prompt_template = """
-<|start_header_id|>system<|end_header_id|>
-Вы личный ассистент по моде.
-ЗАПРЕЩАЮ ВЫДУМЫВАТЬ и вредить людям
-<|eot_id|>
-<|start_header_id|>контекст<|end_header_id|>
-{context_info}
-<|eot_id|>
-<|start_header_id|>user<|end_header_id|>
-Используй максимально emoji
-Ответь на вопросы строго на основе предоставленного Контекста.
-Если информация в контексте отсутствует, напиши сообщение "Ответа нет". 
-Вопрос: {question_info}
-<|eom_id|>
-<|start_header_id|>assistant<|end_header_id|>
+def predict(input, history=[]):
+    prompt_template = """
+    <|start_header_id|>system<|end_header_id|>
+    Вы личный ассистент по моде.
+    ЗАПРЕЩАЮ ВЫДУМЫВАТЬ и вредить людям
+    <|eot_id|>
+    <|start_header_id|>user<|end_header_id|>
+    Используй максимально emoji
+    Ответь на вопросы строго на основе предоставленного Контекста.
+    Если информация в контексте отсутствует, напиши сообщение "Ответа нет". 
+    Вопрос: {question_info}
+    <|eom_id|>
+    """
+    prompt = PromptTemplate.from_template(prompt_template)
+    llm_chain = prompt | llm
+    question_info= """
+    Привет    
+    """
+    output = llm_chain.invoke({'question_info':question_info})
+    return output
 
-"""
-prompt = PromptTemplate.from_template(prompt_template)
-llm_chain = prompt | llm
+#creating a gradio interface
 
-context_info = """
-Боб с боковым пробором Очень стильно выглядит стрижка мужской боб. Особенности прически: объем на макушке и в теменной зоне; боковые пряди спадают на виски; длинная челка, которую зачесывают на лоб или укладывают с пробором. В 2024 году стильную стрижку рекомендуют сочетать с боковым пробором. Такую прическу могут носить мужчины в любом возрасте. Боковой пробор невероятно популярен у современных бизнесменов. Подобный вариант укладки выглядит строго и презентабельно, подходит мужчинам, которые желают всегда выглядеть безупречно и собранно. 
-Используем только средство для укладки - Barbara 100
-"""
+import gradio as gr
 
-question_info= """Боб это?"""
+demo = gr.Interface(fn=predict,
+             inputs=["text", "state"],
+             outputs=["chatbot", "state"])
 
-
-
-output = llm_chain.invoke({"context_info": context_info, 'question_info':question_info}, config={"max_tokens": 5000})
-# output = llm.invoke(prompt_template)
-print(output)
-
-
-def greet(name):
-    return "Hello " + name + "!!"
-
-demo = gr.Interface(fn=greet, inputs="text", outputs="text")
 demo.launch()
