@@ -1,3 +1,5 @@
 gradio
 transformers
 tensorflow
+langchain
+llama-cpp-python
