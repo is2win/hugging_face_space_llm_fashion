@@ -49,4 +49,4 @@ demo = gr.Interface(fn=predict,
              inputs="text",
              outputs="text")
 
-demo.launch()
+demo.launch(share=True)
