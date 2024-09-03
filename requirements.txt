@@ -3,3 +3,4 @@ transformers
 tensorflow
 langchain
 llama-cpp-python
+langchain_community
